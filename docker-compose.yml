@@ -1,0 +1,40 @@
+services:
+  customer-db:
+    container_name: customer-postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: customer_admin
+      POSTGRES_PASSWORD: customer_password
+      PGDATA: /data/customer_postgres
+    volumes:
+      - customer_db_data:/data/customer_postgres
+    ports:
+      - "5331:5432"
+    networks:
+      - customer_backend
+    restart: unless-stopped
+
+  customer-pgadmin:
+    container_name: customer-pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-customer_pgadmin@customerapp.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - customer_pgadmin_data:/var/lib/customer_pgadmin
+    ports:
+      - "5151:80"
+    networks:
+      - customer_backend
+    restart: unless-stopped
+    depends_on:
+      - customer-db
+
+networks:
+  customer_backend:
+    driver: bridge
+
+volumes:
+  customer_db_data:
+  customer_pgadmin_data:
