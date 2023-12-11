@@ -28,7 +28,7 @@ public class Main {
                     faker.number().numberBetween(16, 75)
             );
 
-            repository.insertCustomerIntoCustomers(customer);
+            repository.insertCustomer(customer);
         };
     }
 }
