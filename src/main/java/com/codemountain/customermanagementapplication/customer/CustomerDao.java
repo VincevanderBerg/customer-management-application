@@ -8,5 +8,7 @@ public interface CustomerDao {
     Optional<Customer> selectCustomerById(Long customerId);
     boolean existsCustomerWithId(Long customerId);
     boolean existsCustomerWithEmail(String customerEmail);
-    void insertCustomerIntoCustomers(Customer customer);
+    void insertCustomer(Customer customer);
+    void updateCustomer(Customer customer);
+    void deleteCustomerWithId(Long customerId);
 }

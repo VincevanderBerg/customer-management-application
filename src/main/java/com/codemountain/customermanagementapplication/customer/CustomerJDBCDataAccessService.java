@@ -32,12 +32,12 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
         customers.add(customer1);
 
         Customer customer2 = new Customer(
-                        2L,
-                        "Lanchi",
-                        "van der Berg",
-                        "lanchivanderberg@gmail.com",
-                        34
-                );
+                2L,
+                "Lanchi",
+                "van der Berg",
+                "lanchivanderberg@gmail.com",
+                34
+        );
         customers.add(customer2);
     }
 
@@ -87,7 +87,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     }
 
     @Override
-    public void insertCustomerIntoCustomers(Customer customer) {
+    public void insertCustomer(Customer customer) {
         final String query = """
                 INSERT INTO customers(firstName, lastName, email, age)
                 VALUES (?, ?, ?, ?);
@@ -100,5 +100,31 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
                 customer.getEmail(),
                 customer.getAge()
         );
+    }
+
+    @Override
+    public void updateCustomer(Customer customer) {
+        final String query = """
+                UPDATE customers
+                SET firstName = (?), lastName = (?), email = (?), age = (?)
+                WHERE customerId = (?);
+                """;
+
+        template.update(query,
+                customer.getFirstName(),
+                customer.getLastName(),
+                customer.getEmail(),
+                customer.getAge(),
+                customer.getCustomerId());
+    }
+
+    @Override
+    public void deleteCustomerWithId(Long customerId) {
+        final String query = """
+                DELETE FROM customers
+                WHERE customerId = (?);
+                """;
+
+        template.update(query, customerId);
     }
 }
