@@ -65,6 +65,28 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     }
 
     @Override
+    public boolean existsCustomerWithId(Long customerId) {
+        final String query = """
+                SELECT EXISTS (
+                SELECT * FROM customers
+                WHERE customerId = (?)
+                );
+                """;
+        return Boolean.TRUE.equals(template.queryForObject(query, Boolean.class, customerId));
+    }
+
+    @Override
+    public boolean existsCustomerWithEmail(String customerEmail) {
+        String query = """
+                SELECT EXISTS (
+                SELECT * FROM customers
+                WHERE email = (?)
+                );
+                """;
+        return Boolean.TRUE.equals(template.queryForObject(query, Boolean.class, customerEmail));
+    }
+
+    @Override
     public void insertCustomerIntoCustomers(Customer customer) {
         final String query = """
                 INSERT INTO customers(firstName, lastName, email, age)
